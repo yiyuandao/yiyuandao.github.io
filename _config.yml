@@ -58,6 +58,7 @@ highlighter: rouge
 kramdown:
   input:          GFM
   hard_wrap:      true
+  auto_ids:       true
 
 #highlighter: pygments
 permalink: /:title/
