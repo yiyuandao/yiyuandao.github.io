@@ -6,12 +6,12 @@ title: Django From scratch
 ## 0. django project
 
 生成目录结构:
-```
+{% highlight bash %}
 django-admin startproject mysite
 cd mysite
 django-admin startapp news
-```
-```
+{% endhighlight %}
+{% highlight bash %}
 --|mysite/
 ----|manage.py
 ----|mysite/
@@ -25,12 +25,14 @@ django-admin startapp news
 ------|urls.py
 ------|admin.py
 
-```
+{% endhighlight %}
 ## 1. Design your model
+
 ### 1.1 设计数据模型，自动生成数据库表
   mysite/news/models.py：
 
-```
+{% highlight python %}
+{% raw %}
 from django.db import models
 
 class Reporter(models.Model):
@@ -47,17 +49,19 @@ class Article(models.Model):
 
     def __str__(self):              # __unicode__ on Python 2
         return self.headline
-```
+{% endraw %}
+{% endhighlight %}
 
 ### 1.2 更新数据库：
 
-```
+{% highlight bash %}
 python manage.py migrate
-```
+{% endhighlight %}
 ### 1.3 Enjoy the free API
   通过django api 去操作数据库:CRUD
-  ```
-  python3
+
+  {% highlight python %}
+
   from news.models import Reporter, Article
   # 查找所有reporter
   Reporter.objects.all()
@@ -96,24 +100,25 @@ python manage.py migrate
   r.save()
   # 删除reporter
   r.delete()
-```
+  {% endhighlight %}
+
 ## 2. admin interface
  django 管理接口， 对app进行管理：CRUD
   mysite/news/admin.py：
-```
+{% highlight python %}
 from django.contrib import admin
 
 from . import models
 
 admin.site.register(models.Article)
-```
+{% endhighlight %}
 生成admin用户：
-```
+{% highlight python %}
 django-admin createsuperuser
-```
+{% endhighlight %}
 ## 3. Design your URLs
 mysite/news/urls.py
-```
+{% highlight python %}
 from django.conf.urls import url
 
 from . import views
@@ -123,10 +128,10 @@ urlpatterns = [
     url(r'^articles/([0-9]{4})/([0-9]{2})/$', views.month_archive),
     url(r'^articles/([0-9]{4})/([0-9]{2})/([0-9]+)/$', views.article_detail),
 ]
-```
+{% endhighlight %}
 ## 4. Write your views
 mysite/news/views.py
-```
+{% highlight python %}
 from django.shortcuts import render
 
 from .models import Article
@@ -135,10 +140,12 @@ def year_archive(request, year):
     a_list = Article.objects.filter(pub_date__year=year)
     context = {'year': year, 'article_list': a_list}
     return render(request, 'news/year_archive.html', context)
-```
+{% endhighlight %}
 ## 5. Design your templates
 mysite/news/templates/news/year_archive.html
-```
+
+{% highlight html %}
+{% raw %}
 {% extends "base.html" %}
 
 {% block title %}Articles for {{ year }}{% endblock %}
@@ -152,10 +159,13 @@ mysite/news/templates/news/year_archive.html
     <p>Published {{ article.pub_date|date:"F j, Y" }}</p>
 {% endfor %}
 {% endblock %}
-```
+{% endraw %}
+{% endhighlight %}
+
 
 mysite/templates/base.html
-```
+{% highlight html %}
+{% raw %}
 {% load staticfiles %}
 <html>
 <head>
@@ -166,18 +176,22 @@ mysite/templates/base.html
     {% block content %}{% endblock %}
 </body>
 </html>
-```
+{% endraw %}
+{% endhighlight %}
 
 ## 6. 测试
+
 ### 6.1 运行程序
-```
+{% highlight python %}
 python manage.py runserver 0.0.0.0:9000
-```
+{% endhighlight %}
+
 ### 6.2 展示页面
 http://192.168.10.10:9000/
+
 ### 6.3 展示ADMIN页面
 http://192.168.10.10:9000/admin
 
 
 ## 7. reference
-1. [django-doc](https://docs.djangoproject.com/en/1.9/intro/overview/)
+1.[django-doc](https://docs.djangoproject.com/en/1.9/intro/overview/)
